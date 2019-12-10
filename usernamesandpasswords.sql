@@ -1,6 +1,8 @@
--- CREATE DATABASE usernamesandpasswords;
+CREATE DATABASE IF NOT EXISTS usernamesandpasswords;
+USE usernamesandpasswords;
 
 -- Creates the users table
+DROP TABLE IF EXISTS users;
 CREATE TABLE users(
   userID INT NOT NULL AUTO_INCREMENT,
   firstName VARCHAR(35),
@@ -10,12 +12,14 @@ CREATE TABLE users(
 );
 
 -- Creates the category table
+DROP TABLE IF EXISTS category;
 CREATE TABLE category(
   categoryID INT AUTO_INCREMENT PRIMARY KEY,
   categoryName CHAR(15)
 );
 
 -- Creates the credentials table
+DROP TABLE IF EXISTS credentials;
 CREATE TABLE credentials(
   numOfCreds INT AUTO_INCREMENT,
   userID INT NOT NULL,
@@ -25,7 +29,7 @@ CREATE TABLE credentials(
   dateCreated DATE,
   currentLogin BOOL,
   categoryID INT,
-  PRIMARY KEY(count),
+  PRIMARY KEY(numOfCreds),
   FOREIGN KEY(userID) REFERENCES users(userID),
   FOREIGN KEY(categoryID) REFERENCES category(categoryID)
 );
@@ -56,3 +60,13 @@ VALUES(1, "twitter", "tony123", "password1", "1999-02-09", false, 2);
 INSERT INTO credentials(userID, websiteName, username, password,
 	dateCreated, currentLogin, categoryID)
 VALUES(2, "twitter", "tony123", "password2", "2018-02-09", true, 2);
+
+-- Creates the users
+CREATE USER 'tony'@'localhost' identified by 'tcasio';
+GRANT ALL ON usernamesandpasswords.* TO 'tony'@'localhost';
+
+CREATE USER 'johnsmith'@'localhost' identified by 'smith';
+GRANT SELECT, INSERT, UPDATE, DELETE ON usernamesandpasswords.* TO 'johnsmith'@'localhost';
+
+CREATE USER 'drhoward'@'localhost' identified by 'howardcy';
+GRANT ALL ON usernamesandpasswords.* TO 'drhoward'@'localhost';
